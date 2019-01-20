@@ -1,0 +1,8 @@
+en:
+  welcome: "Welcome to calculator! What's your name? "
+  valid_name: "Sorry, I didn't catch that. What was your name again? "
+  hello: "Hello"
+fr:
+  welcome: "Bienvenue sur Calculator! Comment vous appelez-vous? "
+  valid_name: "Je m'excuse, je n'ai pas entendu ça. Alors, quel était votre nom? "  
+  hello: "Bonjour"
