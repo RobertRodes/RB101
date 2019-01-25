@@ -45,7 +45,7 @@ end
 # statement = 'The Flintstones Rock'
 # p count_letters2 statement
 
-statement = <<-BLOCK
+statement = <<~BLOCK
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean non ligula congue, fringilla nibh
 vel, convallis odio. Ut aliquam vulputate rutrum. Curabitur ultricies vehicula vulputate.
 Suspendisse rhoncus justo eget ornare convallis. Pellentesque sem eros, pharetra non nisi sagittis,
