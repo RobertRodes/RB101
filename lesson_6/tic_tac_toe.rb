@@ -1,9 +1,21 @@
 HUMAN_PLAYER = 'human'.freeze
 COMPUTER_PLAYER = 'computer'.freeze
 CHOOSE_PLAYER = 'choose'.freeze
+NUMBER_TEXT = {
+  1 => 'one',
+  2 => 'two',
+  3 => 'three',
+  4 => 'four',
+  5 => 'five',
+  6 => 'six',
+  7 => 'seven',
+  8 => 'eight',
+  9 => 'nine'
+}.freeze
 
 FIRST_PLAYER = CHOOSE_PLAYER.freeze
 UNBEATABLE = false
+MATCH_GAMES = 3
 
 INITIAL_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
@@ -134,10 +146,10 @@ def prompt(message, newline = false)
 end
 
 def prompt_next(player_score, computer_score)
-  if player_score == 5
-    prompt "You win the match, 5 to #{computer_score}! Play again (Y/N)? "
-  elsif computer_score == 5
-    prompt "Computer wins the match, 5 to #{player_score}. Play again (Y/N)? "
+  if player_score == MATCH_GAMES
+    prompt "You win the match, #{MATCH_GAMES} to #{computer_score}! Play again (Y/N)? "
+  elsif computer_score == MATCH_GAMES
+    prompt "Computer wins the match, #{MATCH_GAMES} to #{player_score}. Play again (Y/N)? "
   elsif player_score > computer_score
     prompt "You lead, #{player_score} to #{computer_score}. Keep playing (Y/N)?"
   elsif computer_score > player_score
@@ -149,7 +161,15 @@ end
 
 def show_header
   system 'clear'
-  puts 'Welcome to Tic-Tac-Toe. Best of five wins.'
+  wins_text =
+    if MATCH_GAMES == 1
+      'win'
+    elsif MATCH_GAMES >= 9
+      MATCH_GAMES.to_s + ' wins'
+    else
+      NUMBER_TEXT[MATCH_GAMES] + ' wins'
+    end
+  puts "Welcome to Tic-Tac-Toe. First #{wins_text} takes the match."
   puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
 end
 
@@ -170,7 +190,6 @@ current_player = first_player
 player_score = 0
 computer_score = 0
 
-# rubocop:disable Metrics/BlockLength (26/25)
 loop do
   board = init_board
   loop do
@@ -193,9 +212,9 @@ loop do
   puts
 
   prompt_next(player_score, computer_score)
-  break unless gets.chomp.downcase.start_with?('y')
+  break unless gets.chomp.casecmp('y').zero?
 
-  if player_score == 5 || computer_score == 5
+  if player_score == MATCH_GAMES || computer_score == MATCH_GAMES
     player_score = 0
     computer_score = 0
   end
@@ -203,7 +222,6 @@ loop do
   first_player = swap_first_player(first_player) if @alternate_starters
   current_player = first_player
 end
-# rubocop:enable Metrics/BlockLength
 
 system 'clear'
 puts
