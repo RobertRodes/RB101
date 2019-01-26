@@ -118,14 +118,14 @@ def make_move(which_player, board)
 end
 
 def player_move(board)
-  move = nil
+  choice = nil
   loop do
     print "Choose a square (#{join_or(empty_squares(board))}): "
-    move = gets.chomp.to_i
-    break if board[move] == INITIAL_MARKER
+    choice = gets.chomp.to_i
+    break if board[choice] == INITIAL_MARKER
     prompt 'Invalid choice.', true
   end
-  move
+  choice
 end
 
 def prompt(message, newline = false)

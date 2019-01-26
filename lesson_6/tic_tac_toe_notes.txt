@@ -8,13 +8,17 @@ These notes cover places where I departed from or expanded on the solutions give
 
 15. alternate_player toggles the player on the move, stored in current_player.
 
-23. board_line is one of the lines that has markers in it. the_line has a number from 0 to 3, which when multiplied by 3 and incremented by 1 gives the  desired row to update.
+23. board_line displays one of the three lines on the board that has markers in it. the_line has a number from 0 to 3, which when multiplied by 3 and incremented by 1 gives the  desired row to update. Called three times by display_board. 
 
-29. Algorithm for computer move is to apply these criteria in this order: 1) select a winning move, 2) prevent a winning move by the opponent, 3) select the center square, if available, 4) select a corner, if available (skip this if UNBEATABLE is false, see 6) and 5) select a random square.
+I took a stab at writing most of this program myself before following along with the video, so the initial board setup is a bit different from the solution given. I originally had each line in display_board (each line that displays part of the board, that is) in a method call: I had a v_line and h_line for the two different types of lines. I couldn't say that these two methods did anything to improve on simply putting the lines in, so I took them out. But I like the board_line method, so I left it in. (Perhaps I'm too attached to it?)
 
-48. I took a stab at writing most of this myself before following along with the video, so the initial board setup is pretty different from the solution given, putting each line into a method call. I can't say that v_line and h_line do anything to improve on simply putting the lines in, but I like the board_line method.
+29. a. I came up with the computer_move and player_move methods during my first pass, prior to watching the video. My implementation differs from the one in the video in that the actual assignment of the move to the board happens in the main loop, rather than having a mutating method. I thought about making the change, but I rather like the cohesion and coupling characteristics of keeping the actual board assignments in the main play loop, so I left them as is for now. If there are reasons to make the two methods do the board assignment, I'd like to know about them. 
 
-Also, I disabled rubocop's LineLength metric, which flagged line 53. Alternatives such as using print and breaking it into three lines, or setting the result of the ternary expression into a variable and plugging the variable into the line, don't seem to make it clearer than leaving it as is.
+    b. The algorithm for the computer's move is to apply these criteria in this order: 1) select a winning move, 2) prevent a winning move by the opponent, 3) select the center square, if available, 4) select a corner, if available (skip this if UNBEATABLE is false, see 6), and 5) select a random square.
+
+    c. This method is a bit dense, and rubocop thinks so too. I considered pulling it apart into separate methods, but I didn't see that it would clarify the code. I also considered putting it into a big if/elsif block, but I didn't see where that would either. So I disabled the rubocop offense and left it as is for now.
+
+48. I disabled rubocop's LineLength metric, which flagged line 51. Alternatives such as using print and breaking it into three lines, or setting the result of the ternary expression into a variable and plugging the variable into the line, don't seem to make it clearer than leaving it as is.
 
 85. first_player_choice works out who the first player is if FIRST_PLAYER is set to PLAYER_CHOOSE. I allowed for the possibility of alternating the starting player for each game in a match as well. This ran me into a bit of a difficulty: I wanted to keep a flag called alternate_starters to determine whether the user selected this option. 
 
