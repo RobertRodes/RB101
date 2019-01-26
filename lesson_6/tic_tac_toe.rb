@@ -173,7 +173,6 @@ loop do
     square = make_move(current_player, board)
     board[square] = current_player == HUMAN_PLAYER ? PLAYER_MARKER : COMPUTER_MARKER
     current_player = alternate_player(current_player)
-    puts current_player
     break if someone_won?(board) || board_full?(board)
   end
 
