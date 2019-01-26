@@ -46,9 +46,7 @@ end
 
 # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/LineLength
 def display_board(board, first_player)
-  system 'clear'
-  puts 'Welcome to Tic-Tac-Toe. Best of five wins.'
-  puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
+  show_header
   if @alternate_starters
     puts "Alternating starters. #{first_player == HUMAN_PLAYER ? 'Your' : 'Computer\'s'} turn to go first."
   else
@@ -85,6 +83,7 @@ def find_at_risk_square(board, check_which)
 end
 
 def first_player_choice
+  show_header
   prompt 'Who goes first: player, computer or alternate (P/C/A)? '
   case gets.chomp.downcase
   when 'c'
@@ -146,6 +145,12 @@ def prompt_next(player_score, computer_score)
   else
     prompt "All even, #{player_score} to #{computer_score}. Keep playing (Y/N)?"
   end
+end
+
+def show_header
+  system 'clear'
+  puts 'Welcome to Tic-Tac-Toe. Best of five wins.'
+  puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
 end
 
 # rubocop:disable Style/DoubleNegation
