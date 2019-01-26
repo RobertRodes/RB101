@@ -56,11 +56,12 @@ def detect_winner(board)
   nil
 end
 
-# rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/LineLength
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
 def display_board(board, first_player)
   show_header
   if @alternate_starters
-    puts "Alternating starters. #{first_player == HUMAN_PLAYER ? 'Your' : 'Computer\'s'} turn to go first."
+    variable_text = first_player == HUMAN_PLAYER ? 'Your' : "Computer\'s"
+    puts "Alternating starters. #{variable_text} turn to go first."
   else
     puts "#{first_player == HUMAN_PLAYER ? 'You go' : 'Computer goes'} first."
   end
@@ -79,7 +80,7 @@ def display_board(board, first_player)
   puts '     |     |'
   puts
 end
-# rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/LineLength
+# rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
 def empty_squares(board)
   board.keys.select { |key| board[key] == INITIAL_MARKER }
@@ -173,11 +174,9 @@ def show_header
   puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
 end
 
-# rubocop:disable Style/DoubleNegation
 def someone_won?(board)
   !!detect_winner(board)
 end
-# rubocop:enable Style/DoubleNegation
 
 def swap_first_player(last_to_start)
   last_to_start == HUMAN_PLAYER ? COMPUTER_PLAYER : HUMAN_PLAYER

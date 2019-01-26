@@ -2,6 +2,10 @@ Notes to tic_tac_toe.rb
 
 These notes cover places where I departed from or expanded on the solutions given in the lesson. I've organized them by referencing the code line number to which they apply.
 
+A general note about rubocop, IMHO, 80 characters per line is tied to the fact that that's the number of characters a punch card will hold. It was the standard for monitors before Windows really took hold and changed the standard to 132 characters. I changed my default rubocop configuration to 100 characters, and have done so in the file that came with this exercise. I've split line 63 onto two lines because it was a few characters over 100, but I really don't think it makes the line more readable. Quite the opposite, in fact.
+
+If there's a reason other than 50 years of habit that dictates 80 characters per line, I'd appreciate your explanation.
+
 4. See show_header for how NUMBER_TEXT is used. (Following AP Style guidelines for when to write out numbers, just for fun.)
 
 16. FIRST_PLAYER can be configured as any of lines 1, 2 or 3.
@@ -24,16 +28,16 @@ I took a stab at writing most of this program myself before following along with
 
 60. I disabled rubocop's LineLength metric, which flagged line 51. Alternatives such as using print and breaking it into three lines, or setting the result of the ternary expression into a variable and plugging the variable into the line, don't seem to make it clearer than leaving it as is.
 
-97. first_player_choice works out who the first player is if FIRST_PLAYER is set to PLAYER_CHOOSE. I allowed for the possibility of alternating the starting player for each game in a match as well. This ran me into a bit of a difficulty: I wanted to keep a flag called alternate_starters to determine whether the user selected this option. 
+98. first_player_choice works out who the first player is if FIRST_PLAYER is set to PLAYER_CHOOSE. I allowed for the possibility of alternating the starting player for each game in a match as well. This ran me into a bit of a difficulty: I wanted to keep a flag called alternate_starters to determine whether the user selected this option. 
 
     Ways to set this flag without turning alternate_starters into an instance variable seemed pretty tortuous: either pull the logic out of the method and back into the loop, set it up as something mutable, such as perhaps a string (didn't work out a way to do that successfully), and put the first_player and alternate_starters variables into a hash. 
 
     I thought it would be clearest to put it into an instance variable, but I don't know whether this is consistent with accepted style. I couldn't find much online; in particular the style guide doesn't appear to have anything to say about instance variables outside of a class. I also don't see rubocop complaining, so I've left it this way.
 
-148. I suppose I could further follow the DRY principle by working up a method and variable to determine and store the match winner, and then evaluate it both here and on line 216, but it seems a bit martinetish. After all, into each program a little rain must fall.
+149. I suppose I could further follow the DRY principle by working up a method and variable to determine and store the match winner, and then evaluate it both here and on line 216, but it seems a bit martinetish. After all, into each program a little rain must fall.
 
 181. swap_first_player is used if the user has opted to alternate players between match games.
 
-185. See 97.
+185. See 98.
 
-188. first_player is the player who goes first; current_player is the player who is on the move. first_player is initially set in the FIRST_PLAYER constant on line 5. first_player will swap for each game if the player has opted to alternate starting players in a match.
+186. first_player is the player who goes first; current_player is the player who is on the move. first_player is initially set in the FIRST_PLAYER constant on line 5. first_player will swap for each game if the player has opted to alternate starting players in a match.
