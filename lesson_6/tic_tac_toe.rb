@@ -34,7 +34,7 @@ end
 
 def board_line(board, the_line)
   line = the_line * 3 + 1
-  puts "  #{board[line]}  |  #{board[line + 1]}  |  #{board[line + 2]}"
+  "  #{board[line]}  |  #{board[line + 1]}  |  #{board[line + 2]}"
 end
 
 # rubocop:disable Metrics/CyclomaticComplexity
@@ -68,15 +68,15 @@ def display_board(board, first_player)
   puts
   puts
   puts '     |     |'
-  board_line(board, 0)
+  puts board_line(board, 0)
   puts '     |     |'
   puts '-----+-----+-----'
   puts '     |     |'
-  board_line(board, 1)
+  puts board_line(board, 1)
   puts '     |     |'
   puts '-----+-----+-----'
   puts '     |     |'
-  board_line(board, 2)
+  puts board_line(board, 2)
   puts '     |     |'
   puts
 end

@@ -1,5 +1,7 @@
 Notes to tic_tac_toe.rb
 
+I've gone through a number of minor revisions to this code -- and these notes -- since I submitted the code for review. If you have any advice for me about how to keep track of revisions in git, I would much appreciate it.
+
 These notes cover places where I departed from or expanded on the solutions given in the lesson. I've organized them by referencing the code line number to which they apply.
 
 A general note about rubocop, IMHO, 80 characters per line is tied to the fact that that's the number of characters a punch card will hold. It was the standard for monitors before Windows really took hold and changed the standard to 132 characters. I changed my default rubocop configuration to 100 characters, and have done so in the file that came with this exercise. I've split line 63 onto two lines because it was a few characters over 100, but I really don't think it makes the line more readable. Quite the opposite, in fact.
