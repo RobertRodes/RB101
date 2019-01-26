@@ -56,17 +56,17 @@ def display_board(board, first_player)
   end
   puts
   puts
-  v_line
+  puts '     |     |'
   board_line(board, 0)
-  v_line
-  h_line
-  v_line
+  puts '     |     |'
+  puts '-----+-----+-----'
+  puts '     |     |'
   board_line(board, 1)
-  v_line
-  h_line
-  v_line
+  puts '     |     |'
+  puts '-----+-----+-----'
+  puts '     |     |'
   board_line(board, 2)
-  v_line
+  puts '     |     |'
   puts
 end
 # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/LineLength
@@ -96,10 +96,6 @@ def first_player_choice
   else
     HUMAN_PLAYER
   end
-end
-
-def h_line
-  puts '-----+-----+-----'
 end
 
 def init_board
@@ -160,10 +156,6 @@ end
 
 def swap_first_player(last_to_start)
   last_to_start == HUMAN_PLAYER ? COMPUTER_PLAYER : HUMAN_PLAYER
-end
-
-def v_line
-  puts '     |     |'
 end
 
 @alternate_starters = false
