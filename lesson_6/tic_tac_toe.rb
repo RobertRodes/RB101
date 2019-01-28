@@ -37,13 +37,16 @@ def board_line(board, the_line)
   "  #{board[line]}  |  #{board[line + 1]}  |  #{board[line + 2]}"
 end
 
+def center_square(board)
+  5 if board[5] == INITIAL_MARKER
+end
+
 def computer_move(board)
-  choice = find_at_risk_square(board, COMPUTER_MARKER)
-  choice = find_at_risk_square(board, PLAYER_MARKER) if choice.nil?
-  choice = 5 if board[5] == INITIAL_MARKER && choice.nil?
-  choice = corner_play(board) if choice.nil?
-  choice = empty_squares(board).sample if choice.nil?
-  choice
+  find_at_risk_square(board, COMPUTER_MARKER) ||
+  find_at_risk_square(board, PLAYER_MARKER) ||
+  center_square(board) ||
+  corner_play(board) ||
+  empty_squares(board).sample
 end
 
 def corner_play(board)
@@ -115,7 +118,7 @@ def first_player_choice
   show_header
   loop do
     prompt 'Who goes first: you (player), me (computer) or alternate between us', true
-    prompt '(P/C/A)? '
+    prompt '(P/C/A)?'
     case gets.chomp.downcase
     when 'c'
       return COMPUTER_PLAYER
