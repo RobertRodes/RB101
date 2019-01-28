@@ -37,16 +37,24 @@ def board_line(board, the_line)
   "  #{board[line]}  |  #{board[line + 1]}  |  #{board[line + 2]}"
 end
 
-# rubocop:disable Metrics/CyclomaticComplexity
 def computer_move(board)
   choice = find_at_risk_square(board, COMPUTER_MARKER)
   choice = find_at_risk_square(board, PLAYER_MARKER) if choice.nil?
   choice = 5 if board[5] == INITIAL_MARKER && choice.nil?
-  choice = board.slice(1, 3, 7, 9).key(INITIAL_MARKER) if choice.nil? && UNBEATABLE
+  choice = corner_play(board) if choice.nil?
   choice = empty_squares(board).sample if choice.nil?
   choice
 end
-# rubocop:enable Metrics/CyclomaticComplexity
+
+def corner_play(board)
+  return unless UNBEATABLE
+  if board.values_at(1, 9).all?(PLAYER_MARKER) ||
+     board.values_at(3, 7).all?(PLAYER_MARKER)
+    board.slice(2, 4, 6, 8).key(INITIAL_MARKER)
+  else
+    board.slice(1, 3, 7, 9).key(INITIAL_MARKER)
+  end
+end
 
 def detect_winner(board)
   WINNING_LINES.each do |line|
@@ -56,15 +64,7 @@ def detect_winner(board)
   nil
 end
 
-# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-def display_board(board, first_player)
-  show_header
-  if @alternate_starters
-    variable_text = first_player == HUMAN_PLAYER ? 'Your' : "Computer\'s"
-    puts "Alternating starters. #{variable_text} turn to go first."
-  else
-    puts "#{first_player == HUMAN_PLAYER ? 'You go' : 'Computer goes'} first."
-  end
+def display_board(board)
   puts
   puts
   puts '     |     |'
@@ -80,7 +80,6 @@ def display_board(board, first_player)
   puts '     |     |'
   puts
 end
-# rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
 def empty_squares(board)
   board.keys.select { |key| board[key] == INITIAL_MARKER }
@@ -88,25 +87,56 @@ end
 
 def find_at_risk_square(board, check_which)
   WINNING_LINES.each do |line|
-    if board.values_at(*line).count(check_which) == 2
+    line_board_values = board.values_at(*line)
+    if line_board_values.count(check_which) == 2 &&
+       line_board_values.include?(INITIAL_MARKER)
       return board.select { |k, _| line.include?(k) }.key(INITIAL_MARKER)
     end
   end
   nil
 end
 
-def first_player_choice
-  show_header
-  prompt 'Who goes first: player, computer or alternate (P/C/A)? '
-  case gets.chomp.downcase
-  when 'c'
-    return COMPUTER_PLAYER
-  when 'a'
+def first_alternating_player_choice
+  loop do
     @alternate_starters = true
     prompt 'Who will start (P/C)? '
-    gets.chomp.casecmp('c').zero? ? COMPUTER_PLAYER : HUMAN_PLAYER
+    case gets.chomp.downcase
+    when 'c'
+      return COMPUTER_PLAYER
+    when 'p'
+      return HUMAN_PLAYER
+    else
+      prompt 'Sorry, I can only recognize P or C here.', true
+    end
+  end
+end
+
+def first_player_choice
+  show_header
+  loop do
+    prompt 'Who goes first: you (player), me (computer) or alternate between us', true
+    prompt '(P/C/A)? '
+    case gets.chomp.downcase
+    when 'c'
+      return COMPUTER_PLAYER
+    when 'a'
+      return first_alternating_player_choice
+    when 'p'
+      return HUMAN_PLAYER
+    else
+      prompt 'Sorry, I can only recognize P, C or A here.', true
+    end
+  end
+end
+
+def header_starter_text(first_player = nil)
+  if @alternate_starters
+    variable_text = first_player == HUMAN_PLAYER ? 'Your' : "My"
+    "Alternating starters. #{variable_text} turn to go first."
+  elsif first_player
+    "#{first_player == HUMAN_PLAYER ? 'You' : 'I'} go first."
   else
-    HUMAN_PLAYER
+    ''
   end
 end
 
@@ -160,18 +190,23 @@ def prompt_next(player_score, computer_score)
   end
 end
 
-def show_header
+def show_header(first_player = nil)
   system 'clear'
+
   wins_text =
     if MATCH_GAMES == 1
       'win'
     elsif MATCH_GAMES >= 9
-      MATCH_GAMES.to_s + ' wins'
+      'to ' + MATCH_GAMES.to_s + ' wins'
     else
-      NUMBER_TEXT[MATCH_GAMES] + ' wins'
+      'to ' + NUMBER_TEXT[MATCH_GAMES] + ' wins'
     end
-  puts "Welcome to Tic-Tac-Toe. First #{wins_text} takes the match."
-  puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
+  puts "Welcome to Tic-Tac-Toe!".center(80)
+  puts
+  puts "The first #{wins_text} takes the match."
+  puts "You are #{PLAYER_MARKER}, and I am  #{COMPUTER_MARKER}."
+
+  puts header_starter_text(first_player)
 end
 
 def someone_won?(board)
@@ -192,14 +227,16 @@ computer_score = 0
 loop do
   board = init_board
   loop do
-    display_board(board, first_player)
+    show_header(first_player)
+    display_board(board)
     square = make_move(current_player, board)
     board[square] = current_player == HUMAN_PLAYER ? PLAYER_MARKER : COMPUTER_MARKER
     current_player = alternate_player(current_player)
     break if someone_won?(board) || board_full?(board)
   end
 
-  display_board(board, first_player)
+  show_header(first_player)
+  display_board(board)
 
   if someone_won?(board)
     winner = detect_winner(board)
@@ -211,7 +248,18 @@ loop do
   puts
 
   prompt_next(player_score, computer_score)
-  break unless gets.chomp.casecmp('y').zero?
+  continue = ''
+  loop do
+    continue = gets.chomp.downcase
+    break if 'yn'.chars.include? continue
+    prompt 'Sorry, I can only recognize Y or N here.', true
+    if player_score == MATCH_GAMES || computer_score == MATCH_GAMES
+      prompt 'PLay again (Y/N)?'
+    else
+      prompt 'Keep playing (Y/N)?'
+    end
+  end
+  break if continue == 'n'
 
   if player_score == MATCH_GAMES || computer_score == MATCH_GAMES
     player_score = 0

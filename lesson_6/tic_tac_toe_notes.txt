@@ -1,45 +1,14 @@
-Notes to tic_tac_toe.rb
+Notes to black_jack.rb
 
-I've gone through a number of minor revisions to this code -- and these notes -- since I submitted the code for review. If you have any advice for me about how to keep track of revisions in git, I would much appreciate it.
+Hand total calculation algorithm.
 
-These notes cover places where I departed from or expanded on the solutions given in the lesson. I've organized them by referencing the code line number to which they apply.
+Add all values in hand: 
+  -  10, J, Q, K all count as 10
+  -  A counts 11
+  -  Everything else counts face value
 
-A general note about rubocop, IMHO, 80 characters per line is tied to the fact that that's the number of characters a punch card will hold. It was the standard for monitors before Windows really took hold and changed the standard to 132 characters. I changed my default rubocop configuration to 100 characters, and have done so in the file that came with this exercise. I've split line 63 onto two lines because it was a few characters over 100, but I really don't think it makes the line more readable. Quite the opposite, in fact.
+If sum is greater than 21:
+  -  Subtract 10 if there is an A in hand.
+  -  Repeat for each A in hand until sum is less than or equal to 21.
+  -  If sum is still greater than 21, bust.
 
-If there's a reason other than 50 years of habit that dictates 80 characters per line, I'd appreciate your explanation.
-
-4. See show_header for how NUMBER_TEXT is used. (Following AP Style guidelines for when to write out numbers, just for fun.)
-
-16. FIRST_PLAYER can be configured as any of lines 1, 2 or 3.
-
-17. If true, UNBEATABLE includes the strategy of selecting corners. (I can't say that it is really unbeatable when this strategy is included, but I haven't been able to beat it.)
-
-18. MATCH_GAMES is how many game wins it takes to win a match.
-
-27. alternate_player toggles the player on the move, stored in current_player.
-
-35. board_line displays one of the three lines on the board that has markers in it. the_line has a number from 0 to 3, which when multiplied by 3 and incremented by 1 gives the  desired row to update. Called three times by display_board. 
-
-I took a stab at writing most of this program myself before following along with the video, so the initial board setup is a bit different from the solution given. I originally had each line in display_board (each line that displays part of the board, that is) in a method call: I had a v_line and h_line for the two different types of lines. I couldn't say that these two methods did anything to improve on simply putting the lines in, so I took them out. But I like the board_line method, so I left it in. (Perhaps I'm too attached to it?)
-
-41. a. I came up with the computer_move and player_move methods during my first pass, prior to watching the video. My implementation differs from the one in the video in that the actual assignment of the move to the board happens in the main loop, rather than having a mutating method. I thought about making the change, but I rather like the cohesion and coupling characteristics of keeping the actual board assignments in the main play loop, so I left them as is for now. If there are reasons to make the two methods do the board assignment, I'd like to know about them. 
-
-    b. The algorithm for the computer's move is to apply these criteria in this order: 1) select a winning move, 2) prevent a winning move by the opponent, 3) select the center square, if available, 4) select a corner, if available (skip this if UNBEATABLE is false, see 6), and 5) select a random square.
-
-    c. This method is a bit dense, and rubocop thinks so too. I considered pulling it apart into separate methods, but I didn't see that it would clarify the code. I also considered putting it into a big if/elsif block, but I didn't see where that would either. So I disabled the rubocop offense and left it as is for now.
-
-60. I disabled rubocop's LineLength metric, which flagged line 51. Alternatives such as using print and breaking it into three lines, or setting the result of the ternary expression into a variable and plugging the variable into the line, don't seem to make it clearer than leaving it as is.
-
-98. first_player_choice works out who the first player is if FIRST_PLAYER is set to PLAYER_CHOOSE. I allowed for the possibility of alternating the starting player for each game in a match as well. This ran me into a bit of a difficulty: I wanted to keep a flag called alternate_starters to determine whether the user selected this option. 
-
-    Ways to set this flag without turning alternate_starters into an instance variable seemed pretty tortuous: either pull the logic out of the method and back into the loop, set it up as something mutable, such as perhaps a string (didn't work out a way to do that successfully), and put the first_player and alternate_starters variables into a hash. 
-
-    I thought it would be clearest to put it into an instance variable, but I don't know whether this is consistent with accepted style. I couldn't find much online; in particular the style guide doesn't appear to have anything to say about instance variables outside of a class. I also don't see rubocop complaining, so I've left it this way.
-
-149. I suppose I could further follow the DRY principle by working up a method and variable to determine and store the match winner, and then evaluate it both here and on line 216, but it seems a bit martinetish. After all, into each program a little rain must fall.
-
-181. swap_first_player is used if the user has opted to alternate players between match games.
-
-185. See 98.
-
-186. first_player is the player who goes first; current_player is the player who is on the move. first_player is initially set in the FIRST_PLAYER constant on line 5. first_player will swap for each game if the player has opted to alternate starting players in a match.
