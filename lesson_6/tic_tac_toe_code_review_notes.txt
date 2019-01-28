@@ -1,0 +1,15 @@
+Notes to code review
+
+Robocop made no complaints after I made the following revisions.
+
+1. Bug fix. The bug was that sometimes the computer failed to block a winning move as it was expected to do. The source of the problem was the #find_at_risk_square method, which is supposed to go through all possible winning lines, find one with two X's and one space, and return the value of the square with the space in it. It would do this sometimes, but sometimes would return a nil value if two X's and one O were in a line instead of looking for a new line with two X's and one space. I added code to specifically check if, when finding two X's in a line, the other square contained a space. This appears to have repaired the problem.
+
+2. #display_board: I moved everything but the code that displays the board to the #show_header method. I also moved the call to #show_header into the main loop, just before the call to #display_board.
+
+3. Data validation: I set up all the places that required an input value from the user to refuse to continue until the user supplied a valid value (main loop call to #prompt_next, #first_player_choice, #first_alternating_player_choice).
+
+4. Corner strategy in #computer_move: I pulled the corner strategy into its own #corner_play method. I also enhanced it: I found a strategy that causes the computer to always lose if applying the corner strategy, so I changed it. (Player starts and chooses a corner, computer chooses middle, player chooses opposing corner, computer chooses either corner, player chooses last corner and has two ways of winning. The fix is to check whether player has chosen two opposing corners, and if so, choose a non-corner square.) Doing this cleared rubocop's cyclomatic complexity offense.
+
+5. #first_player_choice was too long, so I pulled the part that selects an alternate player into its own method: #first_alternating_player_choice. 
+
+6. After pulling the header printing out of #display_board into #show_header, I got three violations: method too long, ABC and CC. Pulling the part that displays the starter into its own method (#header_starter_text) resolved all three.
