@@ -13,3 +13,5 @@ Robocop made no complaints after I made the following revisions.
 5. #first_player_choice was too long, so I pulled the part that selects an alternate player into its own method: #first_alternating_player_choice. 
 
 6. After pulling the header printing out of #display_board into #show_header, I got three violations: method too long, ABC and CC. Pulling the part that displays the starter into its own method (#header_starter_text) resolved all three.
+
+!
