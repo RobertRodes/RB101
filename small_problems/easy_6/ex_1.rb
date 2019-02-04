@@ -2,10 +2,7 @@ DEGREE = "\xC2\xB0"
 
 def dms(num)
   degrees = num.to_i
-  p num
   num = (num - degrees).round(2)
-  p num
-  gets
   minutes = (num * 60).to_i
   seconds = ((num * 60 - minutes) * 60).round()
   degrees.to_s + DEGREE + format('%02d', minutes.to_s) + "'" + format('%02d', seconds.to_s)  + '"'
