@@ -1,0 +1,6 @@
+Algorithm:
+
+1. false if even?
+2. false unless mod 7.zero?
+3. false if digits.size != digits.uniq.size
+4. false if number has more than 10 digits
