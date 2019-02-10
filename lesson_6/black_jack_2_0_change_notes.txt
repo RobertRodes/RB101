@@ -1,0 +1,23 @@
+Changes to Version 2.0
+
+Additional features;
+A multiplier to allow a change in compensation for a natural 21
+UTF-8 suit symbols for card suits
+Word wrapping to selected screen size for prompts and opening screen.
+A constant to allow either STDIN.getch or a standard gets.chomp. The former will act on a key input without requiring it to be entered, which speeds up game play.
+
+Cleaned up the UI: 
+Improved positioning of elements on screen, fixed some vertical moving around of various elements in various game states. Fixed quasi-bug where won cash didn’t show on screen until beginning of next hand, rather than at the “play again?” point. Added functionality to disable screen echo while in wait state (using STDIN.getch allows any number of characters to be typed into the console while the dealer is taking hits).
+
+Improved state management: 
+Instance state is contained in a Struct, which gets passed around the different methods as needed. There were too many arguments in most of the method signatures; many methods had as many as five, and many of those were reduced to one.
+
+Improved UI management: 
+All prompts are in a Struct inside the instance state; they get printed in order when showing the table (#show_table). Streamlined and centralized the process of managing player cash.
+
+Improved architecture:
+Corrected significant over-coupling and code bloat in the process to check for a natural and print the results on the screen. Reduced #check_natural, #check_natural_prompt and #check_natural_dealer to #check_natural and #show_dealer_check_natural, and removed all calls to #show_table from them. 
+
+In particular, #check_natural had far too many functions to perform: show the screen, call #check_natural_dealer (which prints the “dealer is checking for a natural” line), decide whether the dealer has a natural, show different versions of the table based on whether or not, get the right prompt depending on dealer’s hand and print it, return true or false to caller. 
+
+Now, #check_natural simply checks who, if anyone, has a natural, and returns an appropriate symbol. #show_dealer_check_natural does the “dealer is checking for a natural” routine (has to print it out on the screen to get the delay effect) and then plugs the appropriate prompt into the .prompts Struct. Then #show_table prints whatever prompts it has. All calls to these methods are handled by the main loop.
