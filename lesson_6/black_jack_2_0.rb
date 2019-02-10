@@ -150,17 +150,6 @@ def closing_message(data)
   end
 end
 
-def closing_screen(data)
-  str_message = closing_message(data) # Hey, it's a rubocop thing.
-  system 'clear'
-  print "\n" + "Bob's Black Jack".center(SCREEN_WIDTH) + "\n\n"
-  print word_wrap "Thank you for playing at Bob's Black Jack!\n\n"
-  print word_wrap "#{str_message}\n\n"
-  print word_wrap 'Please hit any key to leave: '
-  getchar
-  print "\n\n"
-end
-
 def create_hand_view(data, whose)
   if whose == :dealer
     return data.dealer_hand[0].join(' ') unless data.show_dealer
@@ -207,7 +196,7 @@ def dealer_turn(data)
     show_table(data)
     wait SLEEP_TIME
     break if data.dealer_score >= DEALER_STAND_VALUE
-    hit(data.dealer_hand, data.deck)
+    hit!(data.dealer_hand, data.deck)
     data.dealer_score = calc_total(data.dealer_hand)
   end
 end
@@ -222,7 +211,7 @@ def getchar
   char
 end
 
-def hit(hand, deck)
+def hit!(hand, deck)
   hand.push deck.pop
 end
 
@@ -230,7 +219,7 @@ def new_deck
   NUMBERS.product(SUITS).shuffle
 end
 
-def new_hand(data)
+def new_hand!(data)
   data.show_dealer = false
   # data.player_hand = [['A', 'C'], ['10', 'D']]
   # data.dealer_hand = [['10', 'S'], ['A', 'D']]
@@ -240,20 +229,6 @@ def new_hand(data)
   data.dealer_score = calc_total(data.dealer_hand)
   data.hand_result = nil
   data.prompts.check_natural = nil
-end
-
-def opening_screen
-  system 'clear'
-  print "\n" + "Bob's Black Jack".center(SCREEN_WIDTH) + "\n\n"
-  print "Welcome!\n\n"
-  print word_wrap "You have been awarded a gambling spree at Bob's Black " \
-    "Jack, our favorite casino! \n\n" \
-    'Black Jack is the game we play...sort of. No doubling down, and no ' \
-    "splitting pairs. \n\n" \
-    "You have $#{PLAYER_STAKE} to play with. Bet is $#{BET} per hand. \n\n" \
-    "Black Jack pays #{NATURAL_MULTIPLIER} to 1. \n\n"
-  prompt word_wrap('Please hit "Enter" when you are ready to begin: ')
-  getchar
 end
 
 def player_decision
@@ -271,7 +246,7 @@ def player_turn(data)
     play = player_decision
 
     if play == 'h'
-      hit(data.player_hand, data.deck)
+      hit!(data.player_hand, data.deck)
       data.player_score = calc_total(data.player_hand)
       show_table(data)
     end
@@ -283,6 +258,31 @@ end
 def prompt(message, newline = false)
   print "=> #{message}"
   print "\n" if newline
+end
+
+def show_opening_screen
+  system 'clear'
+  print "\n" + "Bob's Black Jack".center(SCREEN_WIDTH) + "\n\n"
+  print "Welcome!\n\n"
+  print word_wrap "You have been awarded a gambling spree at Bob's Black " \
+    "Jack, our favorite casino! \n\n" \
+    'Black Jack is the game we play...sort of. No doubling down, and no ' \
+    "splitting pairs. \n\n" \
+    "You have $#{PLAYER_STAKE} to play with. Bet is $#{BET} per hand. \n\n" \
+    "Black Jack pays #{NATURAL_MULTIPLIER} to 1. \n\n"
+  prompt word_wrap('Please hit "Enter" when you are ready to begin: ')
+  getchar
+end
+
+def show_closing_screen(data)
+  str_message = closing_message(data) # Hey, it's a rubocop thing.
+  system 'clear'
+  print "\n" + "Bob's Black Jack".center(SCREEN_WIDTH) + "\n\n"
+  print word_wrap "Thank you for playing at Bob's Black Jack!\n\n"
+  print word_wrap "#{str_message}\n\n"
+  print word_wrap 'Please hit any key to leave: '
+  getchar
+  print "\n\n"
 end
 
 def show_table(data)
@@ -355,10 +355,10 @@ data.prompts = GamePrompts.new(
   nil
 )
 
-opening_screen
+show_opening_screen
 
 loop do
-  new_hand(data)
+  new_hand!(data)
   show_table(data)
 
   unless BUST_VALUE > 21
@@ -388,4 +388,4 @@ loop do
   data.deck = new_deck if data.deck.count <= NEW_DECK_COUNT
 end
 
-closing_screen(data)
+show_closing_screen(data)
