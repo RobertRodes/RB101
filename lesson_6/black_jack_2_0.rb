@@ -206,7 +206,7 @@ def getchar
     char = STDIN.getch
     exit if char == "\u0003"
   else
-    char = gets.chomp
+    char = gets.chomp[0]
   end
   char
 end
