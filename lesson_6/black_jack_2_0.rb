@@ -184,6 +184,22 @@ def deal_hand(deck)
   hand
 end
 
+def dealer_check_natural(data)
+  the_prompt = "Dealer is checking for a natural #{BUST_VALUE} ... "
+  print word_wrap(the_prompt)
+  wait SLEEP_TIME
+
+  if data.dealer_score == BUST_VALUE
+    print "#{NATURAL_YES}\n"
+    the_prompt << NATURAL_YES
+  else
+    print "#{NATURAL_NO}\n\n"
+    the_prompt << NATURAL_NO
+  end
+
+  data.prompts.check_natural = the_prompt
+end
+
 def dealer_turn(data)
   data.show_dealer = true
 
@@ -269,25 +285,6 @@ def prompt(message, newline = false)
   print "\n" if newline
 end
 
-# Interestingly, substituting the_prompt for references to
-# data.prompts.check_natural, and then assigning the_prompt
-# to it at the end, decreased AbcSize from 15.07 to about 9.
-def show_dealer_check_natural(data)
-  the_prompt = "Dealer is checking for a natural #{BUST_VALUE} ... "
-  print word_wrap(the_prompt)
-  wait SLEEP_TIME
-
-  if data.dealer_score == BUST_VALUE
-    print "#{NATURAL_YES}\n"
-    the_prompt << NATURAL_YES
-  else
-    print "#{NATURAL_NO}\n\n"
-    the_prompt << NATURAL_NO
-  end
-
-  data.prompts.check_natural = the_prompt
-end
-
 def show_table(data)
   system 'clear'
   show_table_inner(data)
@@ -365,7 +362,7 @@ loop do
   show_table(data)
 
   unless BUST_VALUE > 21
-    show_dealer_check_natural(data) if CARD_VALUE[data.dealer_hand[0][0]] >= 10
+    dealer_check_natural(data) if CARD_VALUE[data.dealer_hand[0][0]] >= 10
     data.hand_result = check_natural(data)
   end
 
