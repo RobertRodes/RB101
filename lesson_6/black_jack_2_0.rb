@@ -279,7 +279,8 @@ def show_opening_screen
     "splitting pairs. \n\n" \
     "You have $#{PLAYER_STAKE} to play with. Bet is $#{BET} per hand. \n\n" \
     "Black Jack pays #{NATURAL_MULTIPLIER} to 1. \n\n"
-  prompt word_wrap("Please hit #{KEY_ONLY ? 'any key' : '"Enter"'} when you are ready to begin: ")
+  prompt word_wrap("Please hit #{KEY_ONLY ? 'any key' : '"Enter"'} when you " \
+    'are ready to begin: ')
   getchar
 end
 
@@ -377,7 +378,8 @@ loop do
   data.show_dealer = true
   show_table(data)
 
-  prompt word_wrap("Please #{KEY_ONLY ? 'hit' : 'enter'} Q to quit, or anything else to play again: ")
+  prompt word_wrap("Please #{KEY_ONLY ? 'hit' : 'enter'} Q to quit, or " \
+    'anything else to play again: ')
   char = getchar
   print "\n"
   break if !char.nil? && char.casecmp('q').zero?
