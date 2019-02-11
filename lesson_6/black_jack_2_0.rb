@@ -221,8 +221,6 @@ end
 
 def new_hand!(data)
   data.show_dealer = false
-  # data.player_hand = [['A', 'C'], ['10', 'D']]
-  # data.dealer_hand = [['10', 'S'], ['A', 'D']]
   data.player_hand = deal_hand(data.deck)
   data.dealer_hand = deal_hand(data.deck)
   data.player_score = calc_total(data.player_hand)
