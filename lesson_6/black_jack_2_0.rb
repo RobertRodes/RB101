@@ -258,6 +258,17 @@ def prompt(message, newline = false)
   print "\n" if newline
 end
 
+def show_closing_screen(data)
+  str_message = closing_message(data) # Hey, it's a rubocop thing.
+  system 'clear'
+  print "\n" + "Bob's Black Jack".center(SCREEN_WIDTH) + "\n\n"
+  print word_wrap "Thank you for playing at Bob's Black Jack!\n\n"
+  print word_wrap "#{str_message}\n\n"
+  print word_wrap "Please hit #{KEY_ONLY ? 'any key' : '"Enter"'} to leave: "
+  getchar
+  print "\n\n"
+end
+
 def show_opening_screen
   system 'clear'
   print "\n" + "Bob's Black Jack".center(SCREEN_WIDTH) + "\n\n"
@@ -270,17 +281,6 @@ def show_opening_screen
     "Black Jack pays #{NATURAL_MULTIPLIER} to 1. \n\n"
   prompt word_wrap("Please hit #{KEY_ONLY ? 'any key' : '"Enter"'} when you are ready to begin: ")
   getchar
-end
-
-def show_closing_screen(data)
-  str_message = closing_message(data) # Hey, it's a rubocop thing.
-  system 'clear'
-  print "\n" + "Bob's Black Jack".center(SCREEN_WIDTH) + "\n\n"
-  print word_wrap "Thank you for playing at Bob's Black Jack!\n\n"
-  print word_wrap "#{str_message}\n\n"
-  print word_wrap "Please hit #{KEY_ONLY ? 'any key' : '"Enter"'} to leave: "
-  getchar
-  print "\n\n"
 end
 
 def show_table(data)
