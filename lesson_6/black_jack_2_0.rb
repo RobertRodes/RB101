@@ -270,7 +270,7 @@ def show_opening_screen
     "splitting pairs. \n\n" \
     "You have $#{PLAYER_STAKE} to play with. Bet is $#{BET} per hand. \n\n" \
     "Black Jack pays #{NATURAL_MULTIPLIER} to 1. \n\n"
-  prompt word_wrap('Please hit "Enter" when you are ready to begin: ')
+  prompt word_wrap("Please hit #{KEY_ONLY ? 'any key' : '"Enter"'} when you are ready to begin: ")
   getchar
 end
 
@@ -280,7 +280,7 @@ def show_closing_screen(data)
   print "\n" + "Bob's Black Jack".center(SCREEN_WIDTH) + "\n\n"
   print word_wrap "Thank you for playing at Bob's Black Jack!\n\n"
   print word_wrap "#{str_message}\n\n"
-  print word_wrap 'Please hit any key to leave: '
+  print word_wrap "Please hit #{KEY_ONLY ? 'any key' : '"Enter"'} to leave: "
   getchar
   print "\n\n"
 end
@@ -379,10 +379,10 @@ loop do
   data.show_dealer = true
   show_table(data)
 
-  prompt word_wrap('Enter Q to quit, or any other key to play again: ')
+  prompt word_wrap("Please #{KEY_ONLY ? 'hit' : 'enter'} Q to quit, or anything else to play again: ")
   char = getchar
   print "\n"
-  break if char.casecmp('q').zero?
+  break if !char.nil? && char.casecmp('q').zero?
   exit if char == "\u0003"
 
   data.deck = new_deck if data.deck.count <= NEW_DECK_COUNT
