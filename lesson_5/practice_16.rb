@@ -1,9 +1,12 @@
 # method to return a new UUID.
+# Bug fix on line 7: changed 65_536 to 65_535. Range should be
+# from 0 to FFFF; 65_536 is hex value 10000.
+# Analogous bug fix on line 17.
 
 def uuid
   new_uuid = ''
   8.times do |i|
-    hex_value = rand(65_536).to_s(16).rjust(4, '0')
+    hex_value = rand(65_535).to_s(16).rjust(4, '0')
     new_uuid << hex_value
     new_uuid << '-' if [2, 3, 4, 5].include? i
   end
@@ -11,7 +14,7 @@ def uuid
 end
 
 def uuid_part(size)
-  rand(16**size).to_s(16).rjust(size, '0')
+  rand(16**size - 1).to_s(16).rjust(size, '0')
 end
 
 def uuid2
