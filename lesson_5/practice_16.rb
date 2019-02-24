@@ -2,21 +2,22 @@
 
 def uuid
   new_uuid = ''
-  16.times do |i|
-    hex_value = rand(256).to_s(16).rjust(2, '0')
+  8.times do |i|
+    hex_value = rand(65_536).to_s(16).rjust(4, '0')
     new_uuid << hex_value
-    new_uuid << '-' if [3, 5, 7, 9].include? i
+    new_uuid << '-' if [2, 3, 4, 5].include? i
   end
   new_uuid
 end
 
-# Without looping, although rubocop doesn't like it. (ABC is too high.)
+def uuid_part(size)
+  rand(16**size).to_s(16).rjust(size, '0')
+end
+
 def uuid2
-  rand(16**8).to_s(16).rjust(8, '0') + '-' +
-    rand(16**4).to_s(16).rjust(4, '0') + '-' +
-    rand(16**4).to_s(16).rjust(4, '0') + '-' +
-    rand(16**4).to_s(16).rjust(4, '0') + '-' +
-    rand(16**12).to_s(16).rjust(12, '0')
+  num = uuid_part(8) + '-'
+  3.times { num << uuid_part(4) + '-' }
+  num << uuid_part(12)
 end
 
 10.times { puts uuid }
