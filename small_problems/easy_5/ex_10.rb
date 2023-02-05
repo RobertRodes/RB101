@@ -81,7 +81,37 @@ print_in_box(
     'to fit inside a standard terminal window (80 columns, including the sides ' \
     'of the box). For a real challenge, try word wrapping very long messages ' \
     'so they appear on multiple lines, but still within a box.',
+    '',
     'Testing an array with a too long line ... this is a separate array element. ' \
     'No, it really is.'
   ]
 )
+
+# +--------------------------------------------+
+# |                                            |
+# | To boldly go where no one has gone before. |
+# |                                            |
+# +--------------------------------------------+
+# +----------------------------+
+# |                            |
+# | In my end is my beginning. |
+# |                            |
+# +----------------------------+
+# +-----------------------------------------------------------------+
+# |                                                                 |
+# | Yes, to dance beneath the diamond sky with one hand waving free |
+# | Silhouetted by the sea, circled by the circus sands             |
+# | With all memory and fate driven deep beneath the waves          |
+# | Let me forget about today until tomorrow.                       |
+# |                                                                 |
+# +-----------------------------------------------------------------+
+# +------------------------------------------------------------------------------+
+# |                                                                              |
+# | Modify this method so it will truncate the message if it will be too wide to |
+# | fit inside a standard terminal window (80 columns, including the sides of    |
+# | the box). For a real challenge, try word wrapping very long messages so they |
+# | appear on multiple lines, but still within a box.                            |
+# | Testing an array with a too long line ... this is a separate array element.  |
+# | No, it really is.                                                            |
+# |                                                                              |
+# +------------------------------------------------------------------------------+
